@@ -5,6 +5,9 @@ import bokeh
 import bokeh.plotting
 from IPython import display
 import numpy as np
+import IPython.display as ipd
+import subprocess
+
 
 def plot_noteSequence(filename, show_figure=True):
     midi = pretty_midi.PrettyMIDI(filename)
@@ -58,3 +61,15 @@ def plot_noteSequence(filename, show_figure=True):
         bokeh.plotting.show(fig)
         return None
     return fig
+
+
+def midi_to_wav(input_file, output_file):
+    process = subprocess.Popen(['timidity', input_file, '-Ow', '-o', output_file],
+                     stdout=subprocess.PIPE, 
+                     stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+
+
+def play_audio(input_file, output_file):
+    midi_to_wav(input_file, output_file)
+    ipd.Audio(output_file)
